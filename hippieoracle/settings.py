@@ -122,6 +122,4 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'hippieoracle/hippie/maps')
 ]
-STATICFILE_ROOT = [
-    '/var/www/static'
-    ]
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')

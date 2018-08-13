@@ -15,9 +15,13 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
-import django
+from django.conf import settings
+from django.conf.urls.static import static
 import hippieoracle.hippie.views
+
+StaticUrls = static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+print(StaticUrls)
 urlpatterns = [
     url(r'^admin', admin.site.urls),
     url('', hippieoracle.hippie.views.index),
-]
+] + StaticUrls

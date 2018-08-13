@@ -3,8 +3,11 @@ import os
 from django.shortcuts import render
 from django.template import loader
 from django.http import HttpResponse
+
 from . import hippiecore
+from . import processMap
 # Create your views here.
+
 
 from django.conf import settings
 
@@ -16,6 +19,8 @@ def index(request):
     dirPath = os.path.join(settings.BASE_DIR, 'hippieoracle/hippie/maps/MAP.png')
     A = hippiecore.downloadMapImage(IMAGE, dirPath)
 
+    crosshairPath = os.path.join(settings.BASE_DIR, 'hippieoracle/hippie/sizedtarget.png')
+    processMap.putCrosshair(dirPath, crosshairPath)
     template = loader.get_template('index.html')
     context = {'imagePath': 'MAP.png'}
 
