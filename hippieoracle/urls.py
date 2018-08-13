@@ -20,5 +20,4 @@ import hippieoracle.hippie.views
 urlpatterns = [
     url(r'^admin', admin.site.urls),
     url('', hippieoracle.hippie.views.index),
-    url('static', django.views.static.serve, {'show_indexes': True})
 ]

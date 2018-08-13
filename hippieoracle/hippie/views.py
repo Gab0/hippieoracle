@@ -13,7 +13,7 @@ def index(request):
     W = hippiecore.retrieve_locality(-21.771, -41.35, 0.5)
     IMAGE = hippiecore.get_map_image(W[3])
 
-    dirPath = 'hippieoracle/hippie/maps/MAP.png'
+    dirPath = os.path.join(settings.BASE_DIR, 'hippieoracle/hippie/maps/MAP.png')
     A = hippiecore.downloadMapImage(IMAGE, dirPath)
 
     template = loader.get_template('index.html')
