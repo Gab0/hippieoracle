@@ -29,10 +29,10 @@ def get_map_image(coords):
     return URL % (coords[0], coords[1])
 
 
-def downloadMapImage(mapImageUrl):
+def downloadMapImage(mapImageUrl, targetPath):
     a = requests.get(mapImageUrl, stream=True)
     dirPath = 'hippieoracle/hippie/maps'
-    mapPath = os.path.join(dirPath, 'MAP.png')
+    mapPath = os.path.join(targetPath, 'MAP.png')
     with open(mapPath, 'wb') as f:
         shutil.copyfileobj(a.raw, f)
 

@@ -12,9 +12,11 @@ from django.conf import settings
 def index(request):
     W = hippiecore.retrieve_locality(-21.771, -41.35, 0.5)
     IMAGE = hippiecore.get_map_image(W[3])
-    A = hippiecore.downloadMapImage(IMAGE)
+
+    dirPath = 'hippieoracle/hippie/maps/MAP.png'
+    A = hippiecore.downloadMapImage(IMAGE, dirPath)
 
     template = loader.get_template('index.html')
     context = {'imagePath': 'MAP.png'}
-    # return HttpResponse("<img src='%s'>" % IMAGE)
+
     return HttpResponse(template.render(context, request))
