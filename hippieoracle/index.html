@@ -1,9 +1,10 @@
 {% load static from staticfiles %}
+<link href="{% static 'style.css' %}" rel="stylesheet">
 <center><img src="{% static 'bike.jpg' %}">
     <br>
-    <div style="margin: auto;">
+    <div class="mapContainer">
    <!-- <img src="{% static 'sizedtarget.png'%}" style="position: relative; top:-300; left:430;z-index:4;"> -->
-    <img src="{% static imagePath %}",
-         style="position: relative; top:0px; left:0px; border:30px solid #fff;border-radius:30%;padding:10px;filter:invert(90%) saturate(120%);z-index:3;">
+    <img src="{% static imagePath %}", class="map">
+
     </div>
 </center>
