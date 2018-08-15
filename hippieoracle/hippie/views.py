@@ -22,7 +22,8 @@ def index(request):
         pass
 
     crosshairPath = os.path.join(settings.BASE_DIR, 'hippieoracle/hippie/sizedtarget.png')
-    #processMap.putCrosshair(dirPath, crosshairPath)
+    # processMap.putCrosshair(dirPath, crosshairPath)
+    processMap.drawLines(dirPath)
     template = loader.get_template('index.html')
     context = {'imagePath': 'MAP.png'}
 

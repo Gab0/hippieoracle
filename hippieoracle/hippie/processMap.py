@@ -2,6 +2,27 @@
 from PIL import Image
 
 
+def drawLines(mapFilename):
+    mapImage = Image.open(mapFilename)
+
+    mapPixels = mapImage.load()
+
+    height, width = mapImage.size
+
+    def makeLines(length, linecount=2):
+        lines = [length // (linecount + 1) * (z+1) for z in range(linecount)]
+        return lines
+
+    verticalLinePoints = makeLines(height)
+    horizontalLinePoints = makeLines(width)
+    for v in range(height):
+        for h in range(width):
+            if v in verticalLinePoints or h in horizontalLinePoints:
+                mapPixels[v, h] = 0
+
+    mapImage.save(mapFilename)
+
+
 def putCrosshair(mapFilename, crosshairFilename, resize=True):
 
     # Usage:
