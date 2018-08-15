@@ -1,0 +1,27 @@
+ 
+.map {
+    content:"";
+    position: relative;
+    z-index: 4;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    border-left: 2px dotted #444; /*change these values to suit your liking*/
+}
+
+
+.map {
+    position: relative;
+    top:0px;
+    left:0px;
+    border:30px solid #fff;
+    border-radius:30%;
+    padding:10px;
+    filter:invert(90%) saturate(120%);
+    z-index:3;
+}
+
+.mapContainer {
+    margin: auto;
+
+}
