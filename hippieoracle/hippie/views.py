@@ -15,14 +15,14 @@ from django.conf import settings
 def index(request):
     dirPath = os.path.join(settings.BASE_DIR, 'hippieoracle/hippie/maps/MAP.png')
     try:
-        W = hippiecore.retrieve_locality(-21.771, -41.35, 0.5)
-        IMAGE = hippiecore.get_map_image(W[3])
+        W = hippiecore.getCoordinates(-21.771, -41.35, 0.1, 0.3)
+        IMAGE = hippiecore.get_map_image(W)
         A = hippiecore.downloadMapImage(IMAGE, dirPath)
     except Exception:
         pass
 
     crosshairPath = os.path.join(settings.BASE_DIR, 'hippieoracle/hippie/sizedtarget.png')
-    processMap.putCrosshair(dirPath, crosshairPath)
+    #processMap.putCrosshair(dirPath, crosshairPath)
     template = loader.get_template('index.html')
     context = {'imagePath': 'MAP.png'}
 

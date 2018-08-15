@@ -5,6 +5,7 @@ import json
 import shutil
 import os
 from random import randrange, uniform, choice
+import random
 from time import time
 
 googleApiKey = 'AIzaSyAN8DCnslHInk8dHFFQIPPI9-W-eP4sly8'
@@ -35,14 +36,27 @@ def downloadMapImage(mapImageUrl, targetPath):
         shutil.copyfileobj(a.raw, f)
 
 
-def retrieve_locality(originLatitude, originLongitude, radius):
+def getCoordinates(originLatitude, originLongitude, minradius, maxradius):
 
-    lat = originLatitude + uniform(-radius, radius)
-    lng = originLongitude + uniform(-radius, radius)
+    def genRandomComponent(minradius, maxradius):
+        a = uniform(minradius, maxradius)
+        if random.random() < 0.5:
+            a = -a
+        return a
+    lat = originLatitude + genRandomComponent(minradius, maxradius)
+    lng = originLongitude + genRandomComponent(minradius, maxradius)
+    return lat, lng
 
+
+def retrieve_locality(originLatitude, originLongitude, minradius, maxradius):
+
+    def recursiveCall():
+        return retrieve_locality(originLatitude, originLongitude, minradius, maxradius)
+    lat, lng = getCoordinates(originLatitude, originLongitude,
+                              minradius, maxradius)
     URL = "http://maps.googleapis.com/maps/api/geocode/json"
 
-    Parameters = {'latlng': "%f,%f" % (lat,lng),
+    Parameters = {'latlng': "%f,%f" % (lat, lng),
                   'sensor': 'false'}
 
     Request = requests.get(URL, params=Parameters)
@@ -50,16 +64,19 @@ def retrieve_locality(originLatitude, originLongitude, radius):
     jsondata = json.loads(Request.text)
 
     Result = []
-    print(json.dumps(jsondata,indent=4))
-    if len(jsondata["results"]) ==0:
-        return retrieve_locality(originLatitude,originLongitude, radius)
+    print(json.dumps(jsondata, indent=4))
+    if len(jsondata["results"]) == 0:
+        return retrieve_locality(originLatitude,
+                                 originLongitude,
+                                 minradius,
+                                 maxradius)
 
     result = jsondata["results"][0]
 
     ac = result["address_components"]
     print(ac)
     if len(ac) < 1:
-        return retrieve_locality(originLatitude, originLongitude, radius)
+        return recursiveCall()
 
     for component in ac:
         #if 'administrative_area_level_2' in component["types"]:
@@ -71,8 +88,8 @@ def retrieve_locality(originLatitude, originLongitude, radius):
                 Result.append(component['short_name'])
 
     if not len(Result) > 1:
-        return retrieve_locality(originLatitude,originLongitude, radius)
-    Result.append([lat,lng])
+        return recursiveCall()
+    Result.append([lat, lng])
 
     middlelat = (originLatitude - lat)/2
     middlelat = middlelat + lat
@@ -80,7 +97,15 @@ def retrieve_locality(originLatitude, originLongitude, radius):
     middlelng = middlelng + lng
 
     print("Coord Origin: %f,%f   Middle: %f,%f   Destination: %f,%f" %
-          (originLatitude,originLongitude,middlelat,middlelng,lat,lng))
+          (
+              originLatitude,
+              originLongitude,
+              middlelat,
+              middlelng,
+              lat,
+              lng
+          )
+    )
 
     Result.append([middlelat, middlelng])
 
@@ -88,5 +113,5 @@ def retrieve_locality(originLatitude, originLongitude, radius):
 
 
 if __name__ == '__main__':
-    W = retrieve_locality(-21.771, -41.35, 0.5)
+    W = retrieve_locality(-21.771, -41.35, 0.2, 0.5)
     print(get_map_image(W[3]))
