@@ -7,22 +7,10 @@ import os
 from random import randrange, uniform, choice
 import random
 from time import time
+from geopy import distance
 
 googleApiKey = 'AIzaSyAN8DCnslHInk8dHFFQIPPI9-W-eP4sly8'
 W = "7OxgwSvRximk1EpjHCnVuCKSJGM="
-
-
-def trigger(self, message):
-    if '@hippie' in message:
-        Result = retrieve_locality(-21.771, -41.35, 0.5)
-        if ' moderno' in output:
-            self.sendimage(sender, get_map_image(Result[3]))
-        Flavor = ['vagabundear', 'passear', 'vender seus artesanatos',
-                      'manguear']
-        F = choice(Flavor)
-        return "Voce devia ir %s em %s/%s..." % (F, Result[0], Result[1])
-    else:
-        return None
 
 
 def get_map_image(coords):
@@ -36,15 +24,30 @@ def downloadMapImage(mapImageUrl, targetPath):
         shutil.copyfileobj(a.raw, f)
 
 
-def getCoordinates(originLatitude, originLongitude, minradius, maxradius):
+def getCoordinates(originLatitude, originLongitude, minRadiusKM, maxRadiusKM):
+
+    def calculateRadius(origin, minRadiusKM, maxRadiusKM):
+        D = 0
+        w = 0
+        while D < maxRadiusKM:
+            D = distance.distance(origin, (origin[0], origin[1] + w)).km
+            w += 0.01
+        m = w
+
+        while D > minRadiusKM:
+            D = distance.distance(origin, (origin[0], origin[1] + m)).km
+            m -= 0.01
+        return m, w
 
     def genRandomComponent(minradius, maxradius):
         a = uniform(minradius, maxradius)
         if random.random() < 0.5:
             a = -a
         return a
-    lat = originLatitude + genRandomComponent(minradius, maxradius)
-    lng = originLongitude + genRandomComponent(minradius, maxradius)
+    origin = (originLatitude, originLongitude)
+    minRadius, maxRadius = calculateRadius(origin, minRadiusKM, maxRadiusKM)
+    lat = originLatitude + genRandomComponent(minRadius, maxRadius)
+    lng = originLongitude + genRandomComponent(minRadius, maxRadius)
     return lat, lng
 
 
@@ -113,5 +116,5 @@ def retrieve_locality(originLatitude, originLongitude, minradius, maxradius):
 
 
 if __name__ == '__main__':
-    W = retrieve_locality(-21.771, -41.35, 0.2, 0.5)
+    W = retrieve_locality(-21.771, -41.35, 10, 200)
     print(get_map_image(W[3]))

@@ -8,6 +8,13 @@
     left: 50%;
     border-left: 2px dotted #444; /*change these values to suit your liking*/
 }
+@-webkit-keyframes saturate {
+    0%  { -webkit-filter: saturate(none); }
+    20% { -webkit-filter: saturate(2); }
+    40% { -webkit-filter: saturate(3); }
+    60% { -webkit-filter: saturate(4); }
+    A100% { -webkit-filter: saturate(5); }
+}
 
 
 .map {
@@ -21,7 +28,17 @@
     z-index:3;
 }
 
+.map:hover {
+
+    -webkit-animation: invert(90%) saturate 1s infinite;
+}
+
 .mapContainer {
     margin: auto;
 
+}
+
+.googlemaps {
+
+    color: #black;
 }

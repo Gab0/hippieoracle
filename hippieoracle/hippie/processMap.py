@@ -17,8 +17,12 @@ def drawLines(mapFilename):
     horizontalLinePoints = makeLines(width)
     for v in range(height):
         for h in range(width):
-            if v in verticalLinePoints or h in horizontalLinePoints:
-                mapPixels[v, h] = 0
+            if v in verticalLinePoints:
+                if not h % 3:
+                    mapPixels[v, h] = 0
+            if h in horizontalLinePoints:
+                if not v % 3:
+                    mapPixels[v, h] = 0
 
     mapImage.save(mapFilename)
 
