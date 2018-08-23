@@ -1,11 +1,50 @@
+{% csrf_token %}
 {% load static from staticfiles %}
 <link href="{% static 'style.css' %}" rel="stylesheet">
-<center><img src="{% static 'bike.jpg' %}">
-    <br>
-    <div class="mapContainer">
-   <!-- <img src="{% static 'sizedtarget.png'%}" style="position: relative; top:-300; left:430;z-index:4;"> -->
-    <img src="{% static imagePath %}", class="map">
-    <br>
-    <a href="{{ googleUrl }}", class="googlemaps">VIEW</a>
-    </div>
-</center>
+
+
+<script type="text/javascript">
+ window.onload = function() {
+     var minSlider = document.getElementById("minDistance");
+     var maxSlider = document.getElementById("maxDistance");
+
+     var minDistanceOutput = document.getElementById("showMinDistance");
+     var maxDistanceOutput = document.getElementById("showMaxDistance");
+
+
+// Update the current slider value (each time you drag the slider handle)
+minSlider.oninput = function() {
+     minDistanceOutput.innerHTML = "distância mínima: " + this.value + " km.";
+     maxSlider.setAttribute("min", this.value);
+     maxSlider.setAttribute("max", this.value*6);
+     maxSlider.setAttribute("value", this.value*2);
+    }
+maxSlider.oninput = function() {
+    maxDistanceOutput.innerHTML = "distância máxima: " + this.value + " km.";
+ }
+
+
+     minSlider.oninput();
+     maxSlider.oninput();
+ }
+
+</script>
+
+<div>
+    <center><img src="{% static 'bike.jpg' %}"></center>
+
+<div class="distanceSelector">
+ <form action="/map" method="post">
+     <center>
+         <br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+     <input type="range" min="1" max="10" value="5" class="lslider" id="minDistance" name="minDistance">
+     <div id="showMinDistance" class="infoText"></div>
+     <br>
+  <input type="range" min="50" max="100" value="50" class="lslider" id="maxDistance" name="maxDistance">
+     <div id="showMaxDistance" class="infoText"></div>
+  <br><br><br><br>
+  <input type="submit" value="" class="genMap">
+     </center>
+</form> 
+</div>
+</div>

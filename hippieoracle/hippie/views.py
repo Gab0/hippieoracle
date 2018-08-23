@@ -10,35 +10,43 @@ import string
 from . import hippiecore
 from . import processMap
 # Create your views here.
-
-
+from django.template import RequestContext
+from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 
-
+@csrf_exempt
 def index(request):
-    return showMap(request)
-    return HttpResponse("heuhue")
+    template = loader.get_template('index.html')
+    context = {}
+    return HttpResponse(template.render(context, request))
 
-
+@csrf_exempt
 def showMap(request):
     session_name = ''.join(random.choices(string.ascii_uppercase + string.digits, k=12))
     mapName = 'map_%s.png' % session_name
     dirPath = os.path.join(settings.BASE_DIR,
                            'hippieoracle/hippie/maps/', mapName)
 
+    print(request.POST)
+    minRadius = int(request.POST.get('minDistance'))
+    maxRadius = int(request.POST.get('maxDistance'))
+    print("Radius:")
+    print(minRadius)
+    print(maxRadius)
     try:
-        W = hippiecore.getCoordinates(-21.771, -41.35, 10, 50)
+        W = hippiecore.getCoordinates(-21.771, -41.35, minRadius, maxRadius)
         IMAGE = hippiecore.get_map_image(W)
         A = hippiecore.downloadMapImage(IMAGE, dirPath)
-    except Exception:
+    except Exception as e:
+        print(e)
         pass
 
-    print(request.META)
+    #print(request.META)
     googleUrl = "https://www.google.com/maps/@%f,%f,12z" % (W[0], W[1])
     crosshairPath = os.path.join(settings.BASE_DIR, 'hippieoracle/hippie/sizedtarget.png')
     # processMap.putCrosshair(dirPath, crosshairPath)
     processMap.drawLines(dirPath)
-    template = loader.get_template('index.html')
+    template = loader.get_template('mapView.html')
     context = {
         'imagePath': mapName,
         'googleUrl': googleUrl

@@ -23,5 +23,6 @@ StaticUrls = static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 print(StaticUrls)
 urlpatterns = [
     url(r'^admin', admin.site.urls),
+    url('map', hippieoracle.hippie.views.showMap),
     url('', hippieoracle.hippie.views.index),
 ] + StaticUrls

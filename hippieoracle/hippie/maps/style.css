@@ -16,6 +16,19 @@
     A100% { -webkit-filter: saturate(5); }
 }
 
+.distanceSelector {
+    margin: 1 auto;
+    width: 50%;
+    padding: 10px;
+    align: center;
+
+    top:0px;
+    left:0px;
+    border:30px solid #000;
+    border-radius:100%;
+    padding:10px;
+    z-index:3;
+}
 
 .map {
     position: relative;
@@ -41,4 +54,56 @@
 .googlemaps {
 
     color: #black;
+}
+
+
+/* The slider itself */
+.lslider {
+    -webkit-appearance: none;  /* Override default CSS styles */
+    appearance: none;
+    width: 80%; /* Full-width */
+    height: 35px; /* Specified height */
+    outline: 1; /* Remove outline */
+    opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
+    -webkit-transition: .2s; /* 0.2 seconds transition on hover */
+    transition: opacity .2s;
+    background: #1110b3;
+    border-radius: 15px;   
+}
+
+/* Mouse-over effects */
+.lslider:hover {
+    opacity: 1; /* Fully shown on mouse-over */
+}
+
+/* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */
+.lslider::-webkit-slider-thumb {
+    -webkit-appearance: none; /* Override default look */
+    appearance: none;
+    width: 25px; /* Set a specific slider handle width */
+    height: 25px; /* Slider handle height */
+    cursor: pointer; /* Cursor on hover */
+    background: url('bike.jpg');
+    border: 0;
+}
+
+.lslider::-moz-range-thumb {
+    width: 25px; /* Set a specific slider handle width */
+    height: 25px; /* Slider handle height */
+    border: 0;
+    cursor: pointer; /* Cursor on hover */
+    background: url('bike.jpg');
+}
+
+.infoText{
+}
+
+.genMap {
+    background:url(/static/world.png) no-repeat;
+    cursor:pointer;
+    width: 200px;
+    height: 200px;
+
+    resize: 50%;
+    border: none;
 }
