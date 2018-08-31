@@ -5,8 +5,9 @@
     <br>
     <div class="mapContainer">
    <!-- <img src="{% static 'sizedtarget.png'%}" style="position: relative; top:-300; left:430;z-index:4;"> -->
-    <img src="{% static imagePath %}", class="map">
+        <a href="{{ googleUrl }}"><img src="{% static imagePath %}", class="map"></a>
     <br>
-    <a href="{{ googleUrl }}", class="googlemaps">VIEW</a>
+    <!--     <a href="{{ googleUrl }}", class="googlemaps">VIEW</a> -->
+    <div>Line Distance: {{ realDistance }} km.</div>
     </div>
 </center>

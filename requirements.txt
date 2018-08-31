@@ -1,4 +1,4 @@
-Django==1.11.13
-geopy==1.16.0
 requests==2.19.1
+Django==1.11.15
 Pillow==5.2.0
+geopy==1.16.0

@@ -9,8 +9,7 @@ import random
 from time import time
 from geopy import distance
 
-googleApiKey = 'AIzaSyAN8DCnslHInk8dHFFQIPPI9-W-eP4sly8'
-W = "7OxgwSvRximk1EpjHCnVuCKSJGM="
+import math
 
 
 def get_map_image(coords):
@@ -23,6 +22,9 @@ def downloadMapImage(mapImageUrl, targetPath):
     with open(targetPath, 'wb') as f:
         shutil.copyfileobj(a.raw, f)
 
+
+def calculateRealDistance(originCoordinates, targetCoordinates):
+    return distance.distance(originCoordinates, targetCoordinates).km
 
 def getCoordinates(originLatitude, originLongitude, minRadiusKM, maxRadiusKM):
 
@@ -44,10 +46,24 @@ def getCoordinates(originLatitude, originLongitude, minRadiusKM, maxRadiusKM):
         if random.random() < 0.5:
             a = -a
         return a
+
+    def genDoubleRandomComponent(minRadius, maxRadius):
+        return [genRandomComponent(minRadius, maxRadius)
+                for r in range(2)]
+
     origin = (originLatitude, originLongitude)
     minRadius, maxRadius = calculateRadius(origin, minRadiusKM, maxRadiusKM)
-    lat = originLatitude + genRandomComponent(minRadius, maxRadius)
-    lng = originLongitude + genRandomComponent(minRadius, maxRadius)
+
+    deltas = genDoubleRandomComponent(minRadius, maxRadius)
+
+    radiusDistance = -1
+    while radiusDistance > maxRadius or radiusDistance < minRadius:
+        deltas = genDoubleRandomComponent(minRadius, maxRadius)
+        radiusDistance = math.sqrt(deltas[0] ** 2 + deltas[1] ** 2)
+
+    lat = originLatitude + deltas[0]
+    lng = originLongitude + deltas[1]
+
     return lat, lng
 
 
