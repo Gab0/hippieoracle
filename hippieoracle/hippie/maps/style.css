@@ -17,8 +17,10 @@
 }
 
 .distanceSelector {
+    display: block;
+    height: 770px;
+    width: 870px;	
     margin: 1 auto;
-    width: 50%;
     padding: 10px;
     align: center;
 

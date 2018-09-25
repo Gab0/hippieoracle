@@ -34,9 +34,11 @@ def showMap(request):
     print(minRadius)
     print(maxRadius)
 
-    originLat = -21.771
-    originLong = -41.35
+    originLat = -21.7587
+    originLong = -41.3267
 
+    originLat = -22.9068
+    originLong = -43.17289
     try:
         W = hippiecore.getCoordinates(originLat, originLong, minRadius, maxRadius)
         IMAGE = hippiecore.get_map_image(W)
