@@ -32,7 +32,7 @@ def get_map_image(coords):
     }
 
     p = Request('GET', baseurl, params=params).prepare()
-    return p.url[:-1]
+    return p.url
 
 
 def downloadMapImage(mapImageUrl, targetPath):
