@@ -39,17 +39,23 @@ def showMap(request):
 
     originLat = -22.9068
     originLong = -43.17289
+
     try:
         W = hippiecore.getCoordinates(originLat, originLong, minRadius, maxRadius)
-        IMAGE = hippiecore.get_map_image(W)
-        A = hippiecore.downloadMapImage(IMAGE, dirPath)
+        IMAGE_URL = hippiecore.get_map_image(W)
+        A = hippiecore.downloadMapImage(IMAGE_URL, dirPath)
+
+        print(IMAGE_URL)
+        print("Downloaded %s" % dirPath)
     except Exception as e:
-        print(e)
+        print("MAP DOWNLOAD FAILURE.")
+        raise
+
         pass
 
     realDistance = hippiecore.calculateRealDistance((originLat, originLong), W)
 
-    #print(request.META)
+    # print(request.META)
     googleUrl = "https://www.google.com/maps/@%f,%f,12z" % (W[0], W[1])
     crosshairPath = os.path.join(settings.BASE_DIR, 'hippieoracle/hippie/sizedtarget.png')
     # processMap.putCrosshair(dirPath, crosshairPath)

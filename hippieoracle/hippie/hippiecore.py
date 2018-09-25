@@ -10,11 +10,29 @@ from time import time
 from geopy import distance
 
 import math
+from django.conf import settings
+
+
+from requests import Session, Request
 
 
 def get_map_image(coords):
-    URL = 'https://maps.googleapis.com/maps/api/staticmap?center=%f,%f&zoom=12&size=1000x1000'
-    return URL % (coords[0], coords[1])
+
+    apipath = os.path.join(settings.BASE_DIR, "hippieoracle/hippie", "google_apikey")
+
+    apikey = list(filter(None, open(apipath).read().split('\n')))[0]
+
+    baseurl = "https://maps.googleapis.com/maps/api/staticmap"
+
+    params = {
+        "center": "%f,%f" % (coords[0], coords[1]),
+        "zoom": 12,
+        "size": "1000x1000",
+        "key": apikey
+    }
+
+    p = Request('GET', baseurl, params=params).prepare()
+    return p.url[:-1]
 
 
 def downloadMapImage(mapImageUrl, targetPath):
@@ -25,6 +43,7 @@ def downloadMapImage(mapImageUrl, targetPath):
 
 def calculateRealDistance(originCoordinates, targetCoordinates):
     return distance.distance(originCoordinates, targetCoordinates).km
+
 
 def getCoordinates(originLatitude, originLongitude, minRadiusKM, maxRadiusKM):
 
