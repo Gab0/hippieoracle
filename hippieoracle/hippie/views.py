@@ -24,8 +24,10 @@ def index(request):
 def showMap(request):
     session_name = ''.join(random.choices(string.ascii_uppercase + string.digits, k=12))
     mapName = 'map_%s.png' % session_name
-    dirPath = os.path.join(settings.BASE_DIR,
-                           'hippieoracle/hippie/maps/', mapName)
+    hippie_dir = os.path.join(settings.BASE_DIR,
+                              'hippieoracle/hippie')
+
+    mapFilePath = os.path.join(hippie_dir, 'maps', mapName)
 
     print(request.POST)
     minRadius = int(request.POST.get('minDistance'))
@@ -43,10 +45,12 @@ def showMap(request):
     try:
         W = hippiecore.getCoordinates(originLat, originLong, minRadius, maxRadius)
         IMAGE_URL = hippiecore.get_map_image(W)
-        A = hippiecore.downloadMapImage(IMAGE_URL, dirPath)
-
+        A = hippiecore.downloadMapImage(IMAGE_URL, mapFilePath)
+        reqLogFilePath = os.path.join(hippie_dir, "map_request.log")
+        with open(reqLogFilePath, "a+") as reqlog:
+            reqlog.write(IMAGE_URL + '\n')
         print(IMAGE_URL)
-        print("Downloaded %s" % dirPath)
+        print("Downloaded map at %s" % mapFilePath)
     except Exception as e:
         print("MAP DOWNLOAD FAILURE.")
         raise
@@ -59,7 +63,7 @@ def showMap(request):
     googleUrl = "https://www.google.com/maps/@%f,%f,12z" % (W[0], W[1])
     crosshairPath = os.path.join(settings.BASE_DIR, 'hippieoracle/hippie/sizedtarget.png')
     # processMap.putCrosshair(dirPath, crosshairPath)
-    processMap.drawLines(dirPath)
+    processMap.drawLines(mapFilePath)
     template = loader.get_template('mapView.html')
     context = {
         'imagePath': mapName,
