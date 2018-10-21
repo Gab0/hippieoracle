@@ -36,15 +36,23 @@ def showMap(request):
     print(minRadius)
     print(maxRadius)
 
-    originLat = -21.7587
-    originLong = -41.3267
+    locations = {
+        "Campos": (-21.7587, -41.3267),
+        "Rio": (-22.9068, -43.17289)
+        }
 
-    originLat = -22.9068
-    originLong = -43.17289
+    LOC = "Campos"
+    apipath = os.path.join(settings.BASE_DIR,
+                           "hippieoracle/hippie",
+                           "google_apikey"
+    )
+
+    apikey = list(filter(None, open(apipath).read().split('\n')))[0]
+    l = locations[LOC]
 
     try:
-        W = hippiecore.getCoordinates(originLat, originLong, minRadius, maxRadius)
-        IMAGE_URL = hippiecore.get_map_image(W)
+        W = hippiecore.getCoordinates(l[0], l[1], minRadius, maxRadius)
+        IMAGE_URL = hippiecore.get_map_image(W, apikey)
         A = hippiecore.downloadMapImage(IMAGE_URL, mapFilePath)
         reqLogFilePath = os.path.join(hippie_dir, "map_request.log")
         with open(reqLogFilePath, "a+") as reqlog:
@@ -57,7 +65,7 @@ def showMap(request):
 
         pass
 
-    realDistance = hippiecore.calculateRealDistance((originLat, originLong), W)
+    realDistance = hippiecore.calculateRealDistance(l, W)
 
     # print(request.META)
     googleUrl = "https://www.google.com/maps/@%f,%f,12z" % (W[0], W[1])

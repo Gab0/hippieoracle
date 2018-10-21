@@ -10,18 +10,11 @@ from time import time
 from geopy import distance
 
 import math
-from django.conf import settings
+
+from requests import Request
 
 
-from requests import Session, Request
-
-
-def get_map_image(coords):
-
-    apipath = os.path.join(settings.BASE_DIR, "hippieoracle/hippie", "google_apikey")
-
-    apikey = list(filter(None, open(apipath).read().split('\n')))[0]
-
+def get_map_image(coords, apikey):
     baseurl = "https://maps.googleapis.com/maps/api/staticmap"
 
     params = {
