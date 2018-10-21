@@ -42,7 +42,16 @@ maxSlider.oninput = function() {
      <br>
   <input type="range" min="50" max="100" value="50" class="lslider" id="maxDistance" name="maxDistance">
      <div id="showMaxDistance" class="infoText"></div>
-  <br><br><br><br>
+     <br><br><br><br>
+
+     <select name="selected_location">
+     {% for location in locations %}
+     <option value="{{ location }}">{{ location }}</option>
+     {% endfor %}
+
+
+     </select>
+
   <input type="submit" value="" class="genMap">
      </center>
 </form> 

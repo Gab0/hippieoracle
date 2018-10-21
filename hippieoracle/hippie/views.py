@@ -9,23 +9,32 @@ import string
 
 from . import hippiecore
 from . import processMap
+from . import fetchLocation
+
 # Create your views here.
 from django.template import RequestContext
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 
+
+hippie_dir = os.path.join(settings.BASE_DIR,
+                          'hippieoracle/hippie')
+
+locationPath = os.path.join(hippie_dir, "locationData.csv")
+
 @csrf_exempt
 def index(request):
     template = loader.get_template('distanceSelector.html')
-    context = {}
+
+    locationNames = fetchLocation.loadLocations(locationPath).Location
+    context = {"locations": locationNames}
     return HttpResponse(template.render(context, request))
+
 
 @csrf_exempt
 def showMap(request):
     session_name = ''.join(random.choices(string.ascii_uppercase + string.digits, k=12))
     mapName = 'map_%s.png' % session_name
-    hippie_dir = os.path.join(settings.BASE_DIR,
-                              'hippieoracle/hippie')
 
     mapFilePath = os.path.join(hippie_dir, 'maps', mapName)
 
@@ -36,19 +45,16 @@ def showMap(request):
     print(minRadius)
     print(maxRadius)
 
-    locations = {
-        "Campos": (-21.7587, -41.3267),
-        "Rio": (-22.9068, -43.17289)
-        }
 
-    LOC = "Campos"
     apipath = os.path.join(settings.BASE_DIR,
                            "hippieoracle/hippie",
                            "google_apikey"
     )
 
     apikey = list(filter(None, open(apipath).read().split('\n')))[0]
-    l = locations[LOC]
+
+    l = fetchLocation.fetch(request.POST.get("selected_location"), locationPath, apikey)
+    l = (l["lat"], l["lng"])
 
     try:
         W = hippiecore.getCoordinates(l[0], l[1], minRadius, maxRadius)
